@@ -2,83 +2,82 @@
 import classNames from "classnames";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import React from "react";
+import { useState } from "react";
 import { PiBug } from "react-icons/pi";
-
+import { FaBars, FaTimes } from "react-icons/fa";
 interface LinkModel {
   text: string;
   url: string;
 }
-const NavBar = () => {
+const Navbar = () => {
   const path = usePathname();
-  console.log(path);
+  const [nav, setNav] = useState(false);
+  // Array containing navigation items
   const links: LinkModel[] = [
     { text: "Dashboard", url: "/" },
     { text: "Tickets", url: "/tickets" },
   ];
+
   return (
-    <nav className="navbar bg-accent text-white">
-      <div className="flex-1">
-        <Link href="/" className="btn btn-ghost text-4xl">
+    <div className="flex justify-between items-center w-full h-20 px-4 text-black bg-[#bdee63] nav">
+      {/* <h1 className="text-5xl font-signature ml-2"><a className="link-underline hover:transition ease-in-out delay-150 hover:underline hover:decoration-solid" href="">Logo</a></h1> */}
+      <div className="text-5xl font-signature ml-2">
+        <Link
+          className="flex link-underline link-underline-black"
+          href="/"
+          rel="noreferrer"
+        >
           <PiBug></PiBug>
+          Track a Reck
         </Link>
-        <ul className="menu menu-horizontal px-1">
-          {links.map((link) => (
-            <li className="p-1" key={link.text}>
-              <Link
-                className={classNames({
-                  active: path === link.url,
-                })}
-                href={link.url}
-              >
-                {link.text}
+      </div>
+
+      <ul className="hidden md:flex">
+        {links.map(({ text, url }) => (
+          <li
+            key={url}
+            className={classNames({
+              "nav-link px-4 cursor-pointer capitalize  hover:scale-105 hover:text-white duration-200 link-underline":
+                true,
+              "font-medium text-gray-500": path !== url,
+              "font-bold text-black-500": path === url,
+            })}
+          >
+            <Link href={url}>{text}</Link>
+          </li>
+        ))}
+      </ul>
+
+      <div
+        onClick={() => setNav(!nav)}
+        className={classNames({
+          "cursor-pointer pr-4 z-10 text-gray-500 md:hidden": true,
+        })}
+      >
+        {nav ? <FaTimes size={30} /> : <FaBars size={30} />}
+      </div>
+
+      {nav && (
+        <ul className="flex flex-col justify-center items-center absolute top-0 left-0 w-full h-screen bg-gradient-to-b from-black to-gray-800 text-gray-500">
+          {links.map(({ text, url }) => (
+            <li
+              key={url}
+              className={classNames({
+                "px-4 cursor-pointer capitalize  hover:scale-105 hover:text-white duration-200 link-underline":
+                  true,
+                "font-medium text-gray-500": path !== url,
+                "font-bold text-black-500": path === url,
+              })}
+            >
+              <Link onClick={() => setNav(!nav)} href={url}>
+                {text}
               </Link>
             </li>
           ))}
         </ul>
-      </div>
-      <div className="flex-none gap-2">
-        <div className="form-control">
-          <input
-            type="text"
-            placeholder="Search"
-            className="input input-bordered w-24 md:w-auto"
-          />
-        </div>
-        <div className="dropdown dropdown-end">
-          <div
-            tabIndex={0}
-            role="button"
-            className="btn btn-ghost btn-circle avatar"
-          >
-            <div className="w-10 rounded-full">
-              <img
-                alt="Tailwind CSS Navbar component"
-                src="https://daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg"
-              />
-            </div>
-          </div>
-          <ul
-            tabIndex={0}
-            className="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-52"
-          >
-            <li>
-              <a className="justify-between">
-                Profile
-                <span className="badge">New</span>
-              </a>
-            </li>
-            <li>
-              <a>Settings</a>
-            </li>
-            <li>
-              <a>Logout</a>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </nav>
+      )}
+    </div>
   );
 };
 
-export default NavBar;
+export default Navbar;

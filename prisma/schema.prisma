@@ -9,3 +9,36 @@ datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
 }
+
+// model User {
+//   id              Int      @id @default(autoincrement())
+//   username        String   @unique
+//   email           String   @unique
+//   fullName        String   @db.VarChar(255)
+//   createdTickets  Ticket[] @relation("userCreatedTickets")
+//   assignedTickets Ticket[] @relation("assignedToUser")
+// }
+
+model Ticket {
+  id           Int      @id @default(autoincrement())
+  title        String   @db.VarChar(255)
+  description  String   @db.Text
+  status       Status   @default(OPEN) // You might use an enum for different statuses (e.g., "Open," "Closed," "In Progress")
+  //assignedTo   User?    @relation(fields: [assignedToId], references: [id], name: "assignedToUser") // Optional relation to User, indicating who the issue is assigned to
+  //createdBy    User     @relation(fields: [createdById], references: [id], name: "userCreatedTickets") // Required relation to User, indicating who created the issue
+  //assignedToId Int
+  //createdById  Int
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  // Foreign key constraints
+  //@@index([assignedToId], name: "idx_assignedToId")
+  //@@index([createdById], name: "idx_createdById")
+}
+
+enum Status {
+  OPEN
+  INPROGRESS
+  RESOLVED
+  CLOSED
+}

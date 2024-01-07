@@ -4,7 +4,6 @@ import { Button } from "@radix-ui/themes";
 import Link from "next/link";
 
 const TicketsPage = () => {
-  debugger;
   return (
     <div className="h-200">
       <Button>

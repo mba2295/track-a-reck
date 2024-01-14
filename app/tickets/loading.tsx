@@ -1,12 +1,11 @@
-import React from "react";
 import { Table } from "@radix-ui/themes";
-import prisma from "@/prisma/client";
+import React from "react";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 import StatusBadge from "../components/StatusBadge";
-import delay from "delay";
 import TicketToolBar from "./TicketToolBar";
-import Link from "../components/Link";
-const TicketsPage = async () => {
-  const tickets = await prisma?.ticket.findMany();
+const LoadingTickets = () => {
+  const tickets = [1, 2, 3, 4, 5];
   return (
     <>
       <TicketToolBar></TicketToolBar>
@@ -23,25 +22,25 @@ const TicketsPage = async () => {
               </Table.ColumnHeaderCell>
             </Table.Row>
           </Table.Header>
+
           <Table.Body>
             {tickets?.map((ticket) => {
               return (
-                <Table.Row key={ticket.id}>
+                <Table.Row key={ticket}>
                   <Table.RowHeaderCell>
-                    <Link href={`/tickets/${ticket.id}`}>{ticket.title} </Link>
+                    <Skeleton></Skeleton>
                     <div className="block md:hidden">
-                      Status: <StatusBadge status={ticket.status}></StatusBadge>
+                      <Skeleton></Skeleton>
                     </div>
                     <div className="block md:hidden">
-                      Created At: {ticket.createdAt?.toDateString()}
+                      <Skeleton></Skeleton>
                     </div>
                   </Table.RowHeaderCell>
-
                   <Table.Cell className="hidden md:table-cell">
-                    <StatusBadge status={ticket.status}></StatusBadge>
+                    <Skeleton></Skeleton>
                   </Table.Cell>
                   <Table.Cell className="hidden md:table-cell">
-                    {ticket.createdAt?.toDateString()}
+                    <Skeleton></Skeleton>
                   </Table.Cell>
                 </Table.Row>
               );
@@ -53,4 +52,4 @@ const TicketsPage = async () => {
   );
 };
 
-export default TicketsPage;
+export default LoadingTickets;

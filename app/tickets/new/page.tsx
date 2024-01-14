@@ -1,6 +1,6 @@
 "use client";
-import { Button, Callout, Text, TextField } from "@radix-ui/themes";
-import SimpleMDE from "react-simplemde-editor";
+import { Button, Callout, TextField } from "@radix-ui/themes";
+import dynamic from "next/dynamic";
 import "easymde/dist/easymde.min.css";
 import { useForm, Controller } from "react-hook-form";
 import axios from "axios";
@@ -11,8 +11,13 @@ import { z } from "zod";
 import { createTicketSchema } from "@/app/schemaValidation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import ErrorMessage from "@/app/components/ErrorMessage";
+import LoadingSpinner from "@/app/components/LoadingSpinner";
 type NewIssueForm = z.infer<typeof createTicketSchema>;
 
+const SimpleMDE = dynamic(() => import("react-simplemde-editor"), {
+  ssr: false,
+  loading: () => <LoadingSpinner />,
+});
 const NewTicketPage = () => {
   const {
     register,
@@ -23,12 +28,15 @@ const NewTicketPage = () => {
     resolver: zodResolver(createTicketSchema),
   });
   const [error, setError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
   const postNewData = useCallback(async (data: NewIssueForm) => {
     try {
+      setIsSubmitting(true);
       await axios.post("/api/tickets", data);
       router.push("/tickets");
     } catch (error) {
+      setIsSubmitting(false);
       setError("An unexpected error occured. Please try again.");
     }
   }, []);
@@ -64,7 +72,10 @@ const NewTicketPage = () => {
           )}
         ></Controller>
         <ErrorMessage>{errors.description?.message} </ErrorMessage>
-        <Button>Submit New Ticket</Button>
+
+        <Button disabled={isSubmitting}>
+          Submit New Ticket {isSubmitting && <LoadingSpinner></LoadingSpinner>}
+        </Button>
       </form>
     </div>
   );

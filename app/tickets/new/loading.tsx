@@ -1,15 +1,9 @@
-import LoadingSpinner from "@/app/components/LoadingSpinner";
+import { Skeleton } from "@/app/components/Index";
 import { Box } from "@radix-ui/themes";
 import React from "react";
-import Skeleton from "react-loading-skeleton";
-import "react-loading-skeleton/dist/skeleton.css";
+import TicketFormSkeleton from "../_components/TicketFormSkeleton";
 const Loading = () => {
-  return (
-    <Box className="max-w-xl">
-      <Skeleton></Skeleton>
-      <Skeleton height="20rem"></Skeleton>
-    </Box>
-  );
+  return <TicketFormSkeleton></TicketFormSkeleton>;
 };
 
 export default Loading;

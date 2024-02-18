@@ -1,10 +1,8 @@
-import React from "react";
 import { Table } from "@radix-ui/themes";
 import prisma from "@/prisma/client";
-import StatusBadge from "../components/StatusBadge";
-import delay from "delay";
 import TicketToolBar from "./TicketToolBar";
-import Link from "../components/Link";
+import { Link, StatusBadge } from "../components/Index";
+import { useRouter } from "next/navigation";
 const TicketsPage = async () => {
   const tickets = await prisma?.ticket.findMany();
   return (
@@ -52,5 +50,5 @@ const TicketsPage = async () => {
     </>
   );
 };
-
+export const dynamic = "force-dynamic";
 export default TicketsPage;

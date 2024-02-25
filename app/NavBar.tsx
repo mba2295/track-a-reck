@@ -72,7 +72,6 @@ const Navbar = () => {
 
 const AuthUserProfileLogo = () => {
   const { status: status, data: session } = useSession();
-  debugger;
   switch (status) {
     case "loading":
       return <Skeleton width="3rem"></Skeleton>;
@@ -162,7 +161,6 @@ export const MobileLinks = ({
   handleSetNav: (params: any) => any;
 }) => {
   const setNav = (nav: boolean) => {
-    debugger;
     handleSetNav(nav);
   };
   return (

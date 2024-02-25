@@ -2,7 +2,7 @@ import LoadingSpinner from "@/app/components/LoadingSpinner";
 import StatusBadge from "@/app/components/StatusBadge";
 import { Box, Card, Flex, Heading, Text } from "@radix-ui/themes";
 import React from "react";
-import { Skeleton } from "@/app/components/Index";
+import Skeleton from "@/app/components/Skeleton";
 const Loading = async () => {
   return (
     <Box className="max-w-xl">

@@ -1,4 +1,4 @@
-import { ticketSchema } from "@/app/schemaValidation";
+import { PatchTicketSchema } from "@/app/schemaValidation";
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/prisma/client";
 import { getServerSession } from "next-auth";
@@ -12,15 +12,26 @@ export async function PATCH(
     return NextResponse.json({}, { status: 401 });
   }
   const body = await request.json();
-  const validation = await ticketSchema.safeParseAsync(body);
+  const validation = await PatchTicketSchema.safeParseAsync(body);
   if (!validation.success) {
     return NextResponse.json(validation?.error?.format(), { status: 400 });
+  }
+
+  const { title, description, assignedToUserId } = body;
+  if (assignedToUserId) {
+    const user = prisma.user.findUnique({
+      where: { id: assignedToUserId },
+    });
+    if (!user) {
+      return NextResponse.json("No user found for assignment", { status: 400 });
+    }
   }
   const updatedTicket = await prisma?.ticket.update({
     where: { id: parseInt(params.id) },
     data: {
-      title: body.title,
-      description: body.description,
+      title,
+      description,
+      assignedToUserId,
     },
   });
   return NextResponse.json(updatedTicket);

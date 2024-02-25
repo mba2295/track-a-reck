@@ -2,9 +2,20 @@ import { Table } from "@radix-ui/themes";
 import prisma from "@/prisma/client";
 import TicketToolBar from "./TicketToolBar";
 import { Link, StatusBadge } from "../components/Index";
-import { useRouter } from "next/navigation";
-const TicketsPage = async () => {
-  const tickets = await prisma?.ticket.findMany();
+import { Status } from "@prisma/client";
+interface Props {
+  searchParams: { status: Status };
+}
+const TicketsPage = async ({ searchParams }: Props) => {
+  const status = Object.values(Status).includes(searchParams?.status)
+    ? searchParams?.status
+    : undefined;
+
+  const tickets = await prisma?.ticket.findMany({
+    where: {
+      status: status,
+    },
+  });
   return (
     <>
       <TicketToolBar></TicketToolBar>

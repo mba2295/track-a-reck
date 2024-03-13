@@ -2,20 +2,55 @@ import { Table } from "@radix-ui/themes";
 import prisma from "@/prisma/client";
 import TicketToolBar from "./TicketToolBar";
 import { Link, StatusBadge } from "../components/Index";
+import NextLink from "next/link";
 import { Status } from "@prisma/client";
+import {
+  ArrowUpIcon,
+  ThickArrowDownIcon,
+  ThickArrowUpIcon,
+} from "@radix-ui/react-icons";
+import Pagination from "../components/Pagination";
 interface Props {
-  searchParams: { status: Status };
+  searchParams: { status: Status; orderBy: string; page: string };
 }
 const TicketsPage = async ({ searchParams }: Props) => {
   const status = Object.values(Status).includes(searchParams?.status)
     ? searchParams?.status
     : undefined;
+  const where = {
+    status: status,
+  };
+  const orderby = searchParams?.orderBy
+    ? searchParams.orderBy.split(" ")[0]
+    : "";
+  const direction = searchParams?.orderBy
+    ? searchParams.orderBy.split(" ")[1]
+    : "";
+  const pageSize = 10;
+  const pageNo = parseInt(searchParams.page) || 1;
 
-  const tickets = await prisma?.ticket.findMany({
-    where: {
-      status: status,
+  const columns = [
+    { label: "Title", value: "title" },
+    { label: "Status", value: "status", className: "hidden md:table-cell" },
+    {
+      label: "Created At",
+      value: "createdAt",
+      className: "hidden md:table-cell",
     },
+  ];
+  const orderByCondition =
+    columns.map((column) => column.value).includes(orderby) &&
+    ["asc", "desc"].includes(direction)
+      ? { [orderby]: direction }
+      : undefined;
+  console.log(direction);
+  const tickets = await prisma?.ticket.findMany({
+    where,
+    orderBy: orderByCondition,
+    skip: (pageNo - 1) * pageSize,
+    take: pageSize,
   });
+  const totalTicketsCount = await prisma.ticket.count({ where });
   return (
     <>
       <TicketToolBar></TicketToolBar>
@@ -23,13 +58,34 @@ const TicketsPage = async ({ searchParams }: Props) => {
         <Table.Root className="mt-5" variant="surface">
           <Table.Header>
             <Table.Row>
-              <Table.ColumnHeaderCell>Title</Table.ColumnHeaderCell>
-              <Table.ColumnHeaderCell className="hidden md:table-cell">
-                Status
-              </Table.ColumnHeaderCell>
-              <Table.ColumnHeaderCell className="hidden md:table-cell">
-                Created At
-              </Table.ColumnHeaderCell>
+              {columns.map((column, idx) => {
+                return (
+                  <Table.ColumnHeaderCell
+                    key={idx}
+                    className={column?.className ? column.className : ""}
+                  >
+                    <NextLink
+                      href={{
+                        query: {
+                          ...searchParams,
+                          orderBy:
+                            searchParams?.orderBy === `${column.value} asc`
+                              ? `${column.value} desc`
+                              : `${column.value} asc`,
+                        },
+                      }}
+                    >
+                      {column.label}
+                    </NextLink>
+                    {column.value === `${column.value} asc` && (
+                      <ThickArrowUpIcon className="inline" />
+                    )}
+                    {column.value === `${column.value} desc` && (
+                      <ThickArrowDownIcon className="inline" />
+                    )}
+                  </Table.ColumnHeaderCell>
+                );
+              })}
             </Table.Row>
           </Table.Header>
           <Table.Body>
@@ -57,6 +113,11 @@ const TicketsPage = async ({ searchParams }: Props) => {
             })}
           </Table.Body>
         </Table.Root>
+        <Pagination
+          pageSize={pageSize}
+          itemCount={totalTicketsCount}
+          currentPage={pageNo}
+        ></Pagination>
       </div>
     </>
   );

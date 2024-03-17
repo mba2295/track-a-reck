@@ -8,6 +8,7 @@ import DeleteTicketButton from "./DeleteTicketButton";
 import { getServerSession } from "next-auth";
 import authOptions from "@/app/auth/authOptions";
 import AssigneeSelect from "../_components/AssigneeSelect";
+import StatusSelect from "../_components/StatusSelect";
 interface Props {
   params: { id: string };
 }
@@ -37,6 +38,7 @@ const TicketDetailsPage = async ({ params }: Props) => {
           {session && (
             <>
               <AssigneeSelect ticket={ticket}></AssigneeSelect>
+              <StatusSelect ticket={ticket}></StatusSelect>
               <EditTicketButton ticketId={ticket?.id} />
               <DeleteTicketButton ticketId={ticket?.id} />
             </>
@@ -53,4 +55,5 @@ export async function generateMetadata({ params }: Props) {
     description: ticket?.description,
   };
 }
+export const revalidate = 0;
 export default TicketDetailsPage;

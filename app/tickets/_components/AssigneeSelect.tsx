@@ -3,7 +3,7 @@ import { Ticket, User } from "@prisma/client";
 import { Select } from "@radix-ui/themes";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Skeleton } from "@/app/components/Index";
 import toast, { Toaster } from "react-hot-toast";
 

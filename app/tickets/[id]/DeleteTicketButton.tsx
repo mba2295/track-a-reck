@@ -26,7 +26,11 @@ const DeleteTicketButton = ({ ticketId }: { ticketId: number }) => {
     <>
       <AlertDialog.Root>
         <AlertDialog.Trigger>
-          <Button color="red" disabled={isDeleting}>
+          <Button
+            style={{ backgroundColor: "var(--red-9)", color: "white" }}
+            // color="red"
+            disabled={isDeleting}
+          >
             <CrossCircledIcon></CrossCircledIcon>Delete Ticket
             {isDeleting && <LoadingSpinner></LoadingSpinner>}
           </Button>
@@ -39,12 +43,19 @@ const DeleteTicketButton = ({ ticketId }: { ticketId: number }) => {
 
           <Flex gap="3" mt="4" justify="end">
             <AlertDialog.Cancel>
-              <Button variant="soft" color="gray">
+              <Button
+                style={{ backgroundColor: "gray", color: "white" }}
+                // variant="soft"
+                // color="gray"
+              >
                 Cancel
               </Button>
             </AlertDialog.Cancel>
             <AlertDialog.Action>
-              <Button variant="solid" color="red" onClick={deleteTicket}>
+              <Button
+                style={{ backgroundColor: "var(--red-9)", color: "white" }}
+                onClick={deleteTicket}
+              >
                 Delete ticket
               </Button>
             </AlertDialog.Action>

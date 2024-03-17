@@ -79,17 +79,14 @@ const AuthUserProfileLogo = () => {
         <Box>
           <DropdownMenu.Root>
             <DropdownMenu.Trigger>
-              {/* <Avatar
-                src={session?.user?.image || ""}
-                fallback="A"
-                radius="full"
-              /> */}
-              <Avatar
-                alt="Profile"
-                height={30}
-                width={30}
-                src={session?.user?.image || ""}
-              ></Avatar>
+              <Box>
+                <Avatar
+                  alt="Profile"
+                  height={30}
+                  width={30}
+                  src={session?.user?.image || ""}
+                ></Avatar>
+              </Box>
             </DropdownMenu.Trigger>
             <DropdownMenu.Content>
               <DropdownMenu.Item>

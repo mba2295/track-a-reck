@@ -38,7 +38,7 @@ const TicketDetailsPage = async ({ params }: Props) => {
             <>
               <AssigneeSelect ticket={ticket}></AssigneeSelect>
               <EditTicketButton ticketId={ticket?.id} />
-              <DeleteTicketButton ticketId={ticket?.id} />{" "}
+              <DeleteTicketButton ticketId={ticket?.id} />
             </>
           )}
         </Flex>

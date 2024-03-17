@@ -86,7 +86,7 @@ const generateCardItemsForStatus = async (
       throw new Error("Unhandled status");
   }
 };
-
+export const revalidate = 0;
 export const metadata: Metadata = {
   title: "Track a reck - Tickets Dashboard",
   description: "View the recent activity and insights",

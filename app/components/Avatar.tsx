@@ -1,4 +1,5 @@
 "use client";
+import { Box } from "@radix-ui/themes";
 import Image from "next/image";
 import React, { useState } from "react";
 
@@ -16,7 +17,7 @@ const Avatar = ({ src, width, height, alt }: Props) => {
       : src;
   return (
     // !hideImage && (
-    <div style={{ borderRadius: "50%", overflow: "hidden" }}>
+    <Box style={{ borderRadius: "50%", overflow: "hidden" }}>
       <Image
         src={source}
         width={width}
@@ -26,7 +27,7 @@ const Avatar = ({ src, width, height, alt }: Props) => {
         //   //setHideImage(true);
         // }}
       />
-    </div>
+    </Box>
   );
   // );
 };

@@ -5,17 +5,10 @@ import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { FaBars, FaTimes } from "react-icons/fa";
 import { useSession } from "next-auth/react";
-import {
-  Avatar,
-  Box,
-  Container,
-  DropdownMenu,
-  Flex,
-  Text,
-} from "@radix-ui/themes";
+import { Box, Container, DropdownMenu, Flex, Text } from "@radix-ui/themes";
 import Image from "next/image";
 import logoPic from "@/public/Track A Reck-logos_transparent.png";
-import Skeleton from "@/app/components/Skeleton";
+import { Skeleton, Avatar } from "@/app/components/Index";
 interface LinkModel {
   text: string;
   url: string;
@@ -86,11 +79,17 @@ const AuthUserProfileLogo = () => {
         <Box>
           <DropdownMenu.Root>
             <DropdownMenu.Trigger>
-              <Avatar
+              {/* <Avatar
                 src={session?.user?.image || ""}
                 fallback="A"
                 radius="full"
-              />
+              /> */}
+              <Avatar
+                alt="Profile"
+                height={30}
+                width={30}
+                src={session?.user?.image || ""}
+              ></Avatar>
             </DropdownMenu.Trigger>
             <DropdownMenu.Content>
               <DropdownMenu.Item>

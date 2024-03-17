@@ -1,4 +1,4 @@
-import React from "react";
+import React, { cache } from "react";
 import prisma from "@/prisma/client";
 import { notFound } from "next/navigation";
 import { Box, Flex, Grid } from "@radix-ui/themes";
@@ -11,14 +11,18 @@ import AssigneeSelect from "../_components/AssigneeSelect";
 interface Props {
   params: { id: string };
 }
+const fetchTicket = cache((ticketId: number) =>
+  prisma.ticket.findUnique({
+    where: { id: ticketId },
+  })
+);
+
 const TicketDetailsPage = async ({ params }: Props) => {
   const session = await getServerSession(authOptions);
   if (!Number(params.id)) {
     notFound();
   }
-  const ticket = await prisma?.ticket.findUnique({
-    where: { id: parseInt(params.id) },
-  });
+  const ticket = await fetchTicket(parseInt(params.id));
   if (!ticket) {
     notFound();
   }
@@ -42,5 +46,11 @@ const TicketDetailsPage = async ({ params }: Props) => {
     </Grid>
   );
 };
-
+export async function generateMetadata({ params }: Props) {
+  const ticket = await fetchTicket(parseInt(params.id));
+  return {
+    title: ticket?.title,
+    description: ticket?.description,
+  };
+}
 export default TicketDetailsPage;
